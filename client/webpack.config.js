@@ -1,17 +1,33 @@
-const path = require('path');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: [
-    './src/index'
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    './src/index.jsx'
   ],
+  module: {
+    loaders: [{
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader'
+    }]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 9000
-  }
+    hot: true,
+    historyApiFallback: true
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
 }
